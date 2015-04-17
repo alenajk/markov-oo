@@ -2,7 +2,6 @@ import sys, random
 
 
 class SimpleMarkovGenerator(object):
-    character_limit = False
 
     def read_files(self, filenames):
         """Given a list of files, make chains from them."""
@@ -40,8 +39,12 @@ class SimpleMarkovGenerator(object):
     def make_text(self):
         """Takes dictionary of markov chains; returns random text."""
 
-        #Start with a random bi-gram
-        bi_gram = random.choice(self.chain.keys())
+        #Start with a random bi-gram, check to see if first word is capitalized
+        #If first word capitalized, select it as starting bi-gram.
+        while True:
+            bi_gram = random.choice(self.chain.keys())
+            if bi_gram[0][0].upper() == bi_gram[0][0]:
+                break
 
         #Start output_string with our first bi-gram
         starter_string = ""
@@ -57,19 +60,15 @@ class SimpleMarkovGenerator(object):
                 bi_gram = (bi_gram[1], new_word)
             else:
                 break
-
-        if self.character_limit == True:
-            output_string = output_string[:139]
         
         return output_string
 
 class TweetableMarkovGenerator(SimpleMarkovGenerator):
 
-    character_limit = True
-
     def make_text(self):
-        text_from_super = super(TweetableMarkovGenerator,self).make_text()
-        return text_from_super[:139]
+        output_string = super(TweetableMarkovGenerator,self).make_text()
+        output_string = output_string[:140]
+        return output_string
 
 if __name__ == "__main__":
 
@@ -79,6 +78,7 @@ if __name__ == "__main__":
     source_string = m.read_files(sys.argv[1:])
     m.make_chains(source_string)
     print m.make_text()
+
 
     # we should get list of filenames from sys.argv
     # we should make an instance of the class
