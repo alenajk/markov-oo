@@ -61,6 +61,7 @@ class SimpleMarkovGenerator(object):
             else:
                 break
         
+        print output_string.rfind(".!?")
         return output_string
 
 class TweetableMarkovGenerator(SimpleMarkovGenerator):
@@ -68,6 +69,10 @@ class TweetableMarkovGenerator(SimpleMarkovGenerator):
     def make_text(self):
         output_string = super(TweetableMarkovGenerator,self).make_text()
         output_string = output_string[:140]
+        print output_string.rfind(".!?")
+        # string of punctuation doesn't work - IDEA - create a list of punctuation
+        # iterate through it and find the indices - test which index is higher
+        # chop output_string after the highest index
         return output_string
 
 if __name__ == "__main__":
